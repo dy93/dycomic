@@ -1,6 +1,10 @@
 {
   "globalDependencies": {
+    "bunyan": "registry:dt/bunyan#0.0.0+20161019135123",
     "express": "registry:dt/express#4.0.0+20160708185218",
-    "node": "registry:dt/node#6.0.0+20161110151007"
+    "express-serve-static-core": "registry:dt/express-serve-static-core#4.0.0+20161012061536",
+    "lockfile": "registry:dt/lockfile#0.4.2+20160316155526",
+    "node": "registry:dt/node#6.0.0+20161110151007",
+    "serve-static": "registry:dt/serve-static#0.0.0+20160606155157"
   }
 }
