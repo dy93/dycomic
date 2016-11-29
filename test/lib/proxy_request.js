@@ -1,12 +1,10 @@
 const fs = require('fs-extra');
-const proxyRequest = require('../../lib/proxy_request');
-
-
+const config = require('../../config').lib.proxy_request;
 
 describe('lib/proxy_request', () => {
 	before(() => {
 		return new Promise((resolve) => {
-			return fs.remove(proxyRequest.getCacheDir(), err => {
+			return fs.remove(config.cacheDir, err => {
 				if (err) {
 					console.log(err);
 				}
@@ -17,7 +15,7 @@ describe('lib/proxy_request', () => {
 
 	it('request1 (no cache)', function () {
 		return new Promise((resolve) => {
-			proxyRequest.request('http://img2.6comic.com:99/4/11783/1/002_4sw.jpg').then(rStream => {
+			require('../../lib/proxy_request').request('http://img2.6comic.com:99/4/11783/1/002_4sw.jpg').then(rStream => {
 				rStream.pipe(fs.createWriteStream('a.jpg', { flags: 'w' }));
 				rStream.on('end', resolve);
 			})
@@ -27,7 +25,7 @@ describe('lib/proxy_request', () => {
 	it('request2 (have cache)', function () {
 		this.timeout(100);
 		return new Promise((resolve) => {
-			proxyRequest.request('http://img2.6comic.com:99/4/11783/1/002_4sw.jpg').then(rStream => {
+			require('../../lib/proxy_request').request('http://img2.6comic.com:99/4/11783/1/002_4sw.jpg').then(rStream => {
 				rStream.pipe(fs.createWriteStream('b.jpg', { flags: 'w' }));
 				rStream.on('end', resolve);
 			})
@@ -37,7 +35,7 @@ describe('lib/proxy_request', () => {
 	after(() => {
 		return Promise.all([
 			new Promise((resolve) => {
-				return fs.remove(proxyRequest.getCacheDir(), err => {
+				return fs.remove(config.cacheDir, err => {
 					if (err) {
 						console.log(err);
 					}
