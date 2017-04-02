@@ -11,6 +11,7 @@ var users = require('./routes/users');
 // const img = require('./routes/img');
 const comic = require('./api/v1/comics');
 const fs = require('fs');
+const crypto = require('crypto')
 
 // try to load stop key
 let secret = ''
@@ -39,8 +40,8 @@ app.use('/api/v1/comics', comic);
 
 // the stop api
 app.use('/stop', function (req, res, next) {
-	let clientSecret = req.headers['x-hub-signature'];
-	if (secret === clientSecret) {
+	let hash = crypto.createHmac('sha1', secret).update(req.body).digest('hex');
+	if (hash === req.headers['x-hub-signature'].substr(5)) {
 		console.log('stop...');
 		process.exit(0);
 	}
