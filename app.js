@@ -1,3 +1,4 @@
+'use strict';
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -9,6 +10,13 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 // const img = require('./routes/img');
 const comic = require('./api/v1/comics');
+const fs = require('fs');
+
+// try to load stop key
+let secret = ''
+try {
+	secret = fs.readFileSync('secret.txt').toString();
+} catch (e) { }
 
 var app = express();
 
@@ -28,6 +36,16 @@ app.use('/', routes);
 app.use('/users', users);
 // app.use('/img', img);
 app.use('/api/v1/comics', comic);
+
+// the stop api
+app.use('/stop', function (req, res, next) {
+	let clientSecret = req.headers['x-hub-signature'];
+	if (secret === clientSecret) {
+		console.log('stop...');
+		process.exit(0);
+	}
+	next();
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
