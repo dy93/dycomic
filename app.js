@@ -40,12 +40,15 @@ app.use('/api/v1/comics', comic);
 
 // the stop api
 app.use('/stop', function (req, res, next) {
-	let hash = crypto.createHmac('sha1', secret).update(req.body).digest('hex');
+	if (!('x-hub-signature' in req.headers)) {
+		return next();
+	}
+	let hash = crypto.createHmac('sha1', secret).update(JSON.stringify(req.body)).digest('hex');
 	if (hash === req.headers['x-hub-signature'].substr(5)) {
 		console.log('stop...');
-		process.exit(0);
+		return process.exit(0);
 	}
-	next();
+	return next();
 });
 
 // catch 404 and forward to error handler
