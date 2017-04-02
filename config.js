@@ -4,11 +4,12 @@ const path = require('path');
 module.exports = {
 	pgsql: {
 		host: '192.168.1.106',
-		port: 5432,
+		port: 15432,
 		database: 'crawler',
 		user: 'postgres',
 		password: 'aaaaaa',
-		ssl: true,
+		// ssl: true,
+		binary: true,
 		poolSize: 20
 	},
 	lib: {
